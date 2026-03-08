@@ -31,8 +31,8 @@ python解释器 | 模拟python，直接执行命令
 配置代理服务器 | 支持配置代理服务器
 模块化设计 | 支持自定义高阶的实验性功能与相关代码
 更换宠物图像 | 选择自己喜欢的图像作为展示（虚拟人物、动物都OK）
-自定义快捷键 | 通过自定义快捷键，直接调出对话框
-右键学术优化 | 通过右键直接调用学术优化(https://github.com/binary-husky/chatgpt_academic)
+自定义快捷键 | 通过自定义快捷键，直接调出对话框或提示词优化器
+右键提示词优化器 | 通过右键直接调用提示词优化器(https://github.com/linshenkx/prompt-optimizer)
 …… | ……
 
 ## 安装与运行
@@ -48,7 +48,7 @@ python解释器 | 模拟python，直接执行命令
 
 3. 将`config.ini`修改为`config_private.ini` ，并且修改参数"OPENAI_API_KEY"、"LLM_MODEL"。
    - 有代理的话，一定要修改自己的代理地址
-4. chatgpt-学术优化相关的配置
+4. 提示词优化器相关的配置
    - 配置API_KEY和代理设置
    - 在`config.py`中，配置 海外Proxy 和 OpenAI API KEY，说明如下
     ```
@@ -94,8 +94,8 @@ python解释器 | 模拟python，直接执行命令
   ![image](https://user-images.githubusercontent.com/46673445/232196578-0db60c9b-594a-486d-8918-634df3dacd6b.png)
   ![image](https://user-images.githubusercontent.com/46673445/232290314-5dd7b082-3ec4-4797-8261-01e310ccabc8.png)
  
-- 右键支持跳转学术优化
-    项目地址：https://github.com/binary-husky/chatgpt_academic
+- 右键支持跳转提示词优化器
+    项目地址：https://github.com/linshenkx/prompt-optimizer
     
     ![image](https://user-images.githubusercontent.com/46673445/233023364-b1cbeeb3-d698-498b-afce-18891096cd22.png)
 
@@ -134,7 +134,7 @@ To do
 - [ ] 滑动条改变图像大小
 - [ ] live2D展示
 - [ ] 移动动态图
-- [ ] 增加其他项目接口（学术优化），转移开发重心
+- [ ] 增加其他项目接口（提示词优化器），转移开发重心
 
 Done
 - [x] 左侧加入插件栏
@@ -170,7 +170,7 @@ Done
 
 ## Star History
 
-[![Star History Chart](https://api.star-history.com/svg?repos=Hanzoe/Pet-GPT&type=Date)](https://star-history.com/#Hanzoe/Pet-GPT&Date)
+[![Star History Chart](https://api.star-history.com/svg?repos=Hanzoe/Pet-GPT&type=Date)](https://www.star-history.com/#Hanzoe/Pet-GPT&Date)
 
 ## 免责申明
 此项目仅供个人学习，禁止商用或者其他非法用途

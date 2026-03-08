@@ -267,8 +267,8 @@ def main():
             self.menu = QMenu(self)
             #调用gpt聊天框
             chat_action = QAction("(开发中）本地聊天", self, triggered=self.toggle_chat_window)
-            #调用web学术优化聊天框
-            web_action = QAction("学术优化", self, triggered=self.toggle_chat_web)
+            #调用prompt-optimizer
+            web_action = QAction("提示词优化器", self, triggered=self.toggle_chat_web)
             change_icon_action = QAction("更换图标", self, triggered=self.change_icon)
             exit_action = QAction("退出", self, triggered=self.close)
             change_nickname_action = QAction("改昵称", self, triggered=self.change_nickname)
@@ -452,7 +452,7 @@ def main():
             layout.addLayout(chat_window_shortcut_layout)
 
             chat_web_shortcut_layout = QHBoxLayout()
-            chat_web_shortcut_label = QLabel("学术优化快捷键:")
+            chat_web_shortcut_label = QLabel("提示词优化器快捷键:")
             self.chat_web_shortcut_input = QKeySequenceEdit()
             self.chat_web_shortcut_input.setKeySequence(QKeySequence(self.config.get("Pet", "Shortcuts_CHAT_WEB")))
             chat_web_shortcut_layout.addWidget(chat_web_shortcut_label)
@@ -493,18 +493,14 @@ def main():
 
         def open_webpage(self):
             import webbrowser
-            # Add your code to open the webpage here. This depends on the browser and how you want to open the webpage.
-            webbrowser.open(self.url, new=0, autoraise=True)
+            webbrowser.open("https://prompt.always200.com", new=0, autoraise=True)
 
         def toggle_chat_web(self):
-            if self.chat_web_thread is None:
-                self.chat_web_thread = threading.Thread(target=self.run_chat_web)
-                self.chat_web_thread.start()
-            else:
-                self.open_webpage()
+            import webbrowser
+            webbrowser.open("https://prompt.always200.com", new=0, autoraise=True)
             
 
-        #快捷键打开网页版窗口
+        #快捷键打开提示词优化器
         # def toggle_chat_web(self):
         #     def run_chat_web():
         #         import asyncio
