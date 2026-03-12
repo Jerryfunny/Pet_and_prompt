@@ -20,19 +20,19 @@ class OpenAI_request(QThread):
         self.prompt_queue = Queue()
 
         #基本参数
-        self.api_key = self.config["OpenAI"]["OPENAI_API_KEY"]
-        self.llm_model = self.config["OpenAI"]["LLM_MODEL"]
-        self.proxy = self.config["OpenAI"]["PROXY"]
+        self.api_key = self.config["OpenAI"]["openai_api_key"]
+        self.llm_model = self.config["OpenAI"]["llm_model"]
+        self.proxy = self.config["OpenAI"]["proxy"]
         self.proxies = {
             "http": self.proxy,
             "https": self.proxy,
         }
-        self.timeout_seconds = int(self.config["OpenAI"]["TIMEOUT_SECONDS"])
-        self.max_retry = int(self.config["OpenAI"]["MAX_RETRY"])
-        self.openaiapi_url = self.config["OpenAI"]["OPENAIAPI_URL"]
-        self.top_p = float(self.config["OpenAI"]["TOP_P"])
-        self.temperature = float(self.config["OpenAI"]["TEMPERATURE"])
-        self.max_tokens = int(self.config["OpenAI"]["MAX_TOKENS"])
+        self.timeout_seconds = int(self.config["OpenAI"]["timeout_seconds"])
+        self.max_retry = int(self.config["OpenAI"]["max_retry"])
+        self.openaiapi_url = self.config["OpenAI"]["openaiapi_url"]
+        self.top_p = float(self.config["OpenAI"]["top_p"])
+        self.temperature = float(self.config["OpenAI"]["temperature"])
+        self.max_tokens = int(self.config["OpenAI"]["max_tokens"])
 
         self.session = requests.Session()
         self.headers = {"Content-Type": "application/json", "Authorization": f"Bearer {self.api_key}"}
@@ -137,30 +137,109 @@ class OpenAI_request(QThread):
                 if retry > self.max_retry: raise TimeoutError
                 if self.max_retry!=0: print(f'请求超时，正在重试 ({retry}/{self.max_retry}) ……')
 
-        stream_response =  response.iter_lines()
+        stream_response = response.iter_lines()
         result = ''
-        while True:
-            try: chunk = next(stream_response).decode()
-            except StopIteration: 
+        print("开始处理流式响应")
+        
+        # 处理流式响应
+        for chunk in stream_response:
+            try:
+                # 解码chunk
+                chunk_str = chunk.decode('utf-8')
+                print(f"接收到chunk: {chunk_str}")
+            except UnicodeDecodeError:
+                print("Unicode解码错误")
+                continue
+            
+            # 跳过空chunk
+            if not chunk_str:
+                print("跳过空chunk")
+                continue
+            
+            # 跳过OPENROUTER PROCESSING信息
+            if 'OPENROUTER PROCESSING' in chunk_str:
+                print("跳过OPENROUTER PROCESSING信息")
+                continue
+            
+            # 只处理以data:开头的chunk
+            if not chunk_str.startswith('data:'):
+                print("跳过非data:开头的chunk")
+                continue
+            
+            # 提取JSON字符串
+            json_str = chunk_str[5:].strip()  # 跳过'data:'前缀
+            print(f"提取的JSON字符串: {json_str}")
+            
+            # 跳过空的JSON字符串
+            if not json_str:
+                print("跳过空的JSON字符串")
+                continue
+            
+            # 跳过[DONE]标记
+            if json_str == '[DONE]':
+                print("遇到[DONE]标记，结束处理")
                 break
-            except requests.exceptions.ConnectionError:
-                chunk = next(stream_response).decode() # 失败了，重试一次？再失败就没办法了。
-            if len(chunk)==0: continue
-            if not chunk.startswith('data:'): 
-                error_msg = self.get_full_error(chunk.encode('utf8'), stream_response).decode()
-                if "reduce the length" in error_msg:
-                    raise ConnectionAbortedError("OpenAI拒绝了请求:" + error_msg)
-                else:
-                    raise RuntimeError("OpenAI拒绝了请求：" + error_msg)
-            json_data = json.loads(chunk.lstrip('data:'))['choices'][0]
-            delta = json_data["delta"]
-            if len(delta) == 0: break
-            if "role" in delta: continue
-            if "content" in delta: 
-                result += delta["content"]
-            else: raise RuntimeError("意外Json结构："+delta)
-        if json_data['finish_reason'] == 'length':
-            raise ConnectionAbortedError("正常结束，但显示Token不足，导致输出不完整，请削减单次输入的文本量。")
+            
+            # 尝试解析JSON
+            try:
+                json_data = json.loads(json_str)
+                print(f"解析后的JSON数据: {json_data}")
+            except json.JSONDecodeError:
+                # 打印错误信息以便调试
+                print(f"JSON解码错误: {json_str}")
+                continue
+            
+            # 检查是否包含choices字段
+            if not isinstance(json_data, dict) or 'choices' not in json_data:
+                print("JSON数据不包含choices字段")
+                continue
+            
+            # 检查choices数组是否为空
+            choices = json_data['choices']
+            if not isinstance(choices, list) or len(choices) == 0:
+                print("choices数组为空")
+                continue
+            
+            # 处理第一个choice
+            choice = choices[0]
+            if not isinstance(choice, dict):
+                print("choice不是字典")
+                continue
+            
+            # 检查是否包含delta字段
+            if 'delta' not in choice:
+                print("choice不包含delta字段")
+                continue
+            
+            delta = choice['delta']
+            if not isinstance(delta, dict):
+                print("delta不是字典")
+                continue
+            
+            # 跳过role字段
+            if 'role' in delta:
+                '''print(f"跳过role字段: {delta['role']}")
+                continue'''
+                print(f"role字段: {delta['role']}")
+            
+            # 提取content
+            if 'content' in delta:
+                content = delta['content']
+                result += content
+                print(f"提取到content: {content}")
+                print(f"当前result: {result}")
+            
+            # 检查是否结束
+            if 'finish_reason' in choice and choice['finish_reason'] == 'length':
+                raise ConnectionAbortedError("正常结束，但显示Token不足，导致输出不完整，请削减单次输入的文本量。")
+            
+            # 如果delta为空，结束处理
+            if len(delta) == 0:
+                print("delta为空，结束处理")
+                break
+        
+        print(f"最终result: {result}")
+        print(f"result长度: {len(result)}")
         return result 
 
     def generate_payload(self, inputs, system_prompt, stream, history):
@@ -170,9 +249,19 @@ class OpenAI_request(QThread):
         timeout_bot_msg = '[Local Message] Request timeout. Network error. Please check proxy settings in config.py.' + \
                   '网络错误，检查代理服务器是否可用，以及代理设置的格式是否正确，格式须是[协议]://[地址]:[端口]，缺一不可。'
         
-        if len(self.api_key) != 51:
+        '''if len(self.api_key) != 51:
             raise AssertionError("你提供了错误的API_KEY。\n\n1. 临时解决方案：直接在输入区键入api_key，然后回车提交。\n\n2. 长效解决方案：在config.py中配置。")
 
+        headers = {
+            "Content-Type": "application/json",
+            "Authorization": f"Bearer {self.api_key}"
+        }'''
+
+        if not (
+            self.api_key.startswith("sk-") 
+            or self.api_key.startswith("sk-or-")
+        ):
+            raise AssertionError("API_KEY格式不正确。")
         headers = {
             "Content-Type": "application/json",
             "Authorization": f"Bearer {self.api_key}"

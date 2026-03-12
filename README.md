@@ -73,7 +73,7 @@ python解释器 | 模拟python，直接执行命令
 7. 也可以修改本地的PetGPT.bat脚本，之后直接双击运行
     ```
     @echo off
-    call conda activate petgpt(这个改成自己的虚拟环境名字）
+    call conda activate petgpt（这个改成自己的虚拟环境名字）
     python main.py
     pause
     ```
