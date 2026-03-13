@@ -82,26 +82,38 @@ class ChatDialogBody(QDialog):
         self.setLayout(layout)
         self.setStyleSheet("""
             QDialog {
-                background-color: #F5F5F5;
+                background-color: #f0f2f5;
                 border-radius: 10px;
             }
-            QTextEdit {
+            QPlainTextEdit {
                 background-color: white;
-                color: black;
-            }
-            QLineEdit {
-                background-color: white;
-                border: 1px solid #ccc;
-                border-radius: 3px;
+                color: #333;
+                border: 1px solid #e1e4e8;
+                border-radius: 8px;
+                padding: 10px;
+                font-size: 14px;
+                font-family: 'Microsoft YaHei', sans-serif;
             }
             QPushButton {
-                background-color: #f44336;
+                background-color: #4CAF50;
                 color: white;
-                font-size: 12px;
-                font-weight: bold;
+                font-size: 14px;
+                font-weight: 500;
                 border: none;
-                padding: 5px;
-                border-radius: 3px;
+                padding: 8px 16px;
+                border-radius: 8px;
+            }
+            QPushButton:hover {
+                background-color: #45a049;
+            }
+            QPushButton:pressed {
+                background-color: #3d8b40;
+            }
+            QPushButton#clearButton {
+                background-color: #9e9e9e;
+            }
+            QPushButton#clearButton:hover {
+                background-color: #757575;
             }
         """)
     
@@ -131,11 +143,7 @@ class ChatDialogBody(QDialog):
         # if role == "system":
         #     index = self.chat_history.container_layout.count()
         #     return index
-        # 分割线
-        line = QFrame(self)
-        line.setFrameShape(QFrame.HLine)
-        line.setFrameShadow(QFrame.Sunken)
-        self.chat_history.container_layout.addWidget(line)  # 将分隔线添加到布局中
+
         # 强制更新容器的大小
         self.chat_history.container.adjustSize()
         # 滚动条到最下面
