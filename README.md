@@ -10,8 +10,6 @@ Pet-GPT 是一个使用 PyQt 编写的桌面宠物程序，支持调用 OpenAI �
   <img src="https://user-images.githubusercontent.com/46673445/232278236-d8665b48-74d9-4103-8cd1-7e7411bf362b.gif" alt="basheng" width="200" style="display: inline-block;">
 </div>
 
-bilibili连接
-https://www.bilibili.com/video/BV1xM4y1y7e7/?vd_source=0256cdccbe38c132828c06c0c3d6dd4f
 
 ## 特点
 
@@ -25,11 +23,8 @@ https://www.bilibili.com/video/BV1xM4y1y7e7/?vd_source=0256cdccbe38c132828c06c0c
 功能 | 描述
 --- | ---
 主动对话v1 | 使用模板随机发起对话，不再被动聊天（下一版本，先向gpt获取对话内容，再主动对话，更生动）
-英文润色 | 修改源语言为专业的英语
-python解释器 | 模拟python，直接执行命令
 自定义插件 | 支持开发设计自己的插件
 配置代理服务器 | 支持配置代理服务器
-模块化设计 | 支持自定义高阶的实验性功能与相关代码
 更换宠物图像 | 选择自己喜欢的图像作为展示（虚拟人物、动物都OK）
 自定义快捷键 | 通过自定义快捷键，直接调出对话框或提示词优化器
 右键提示词优化器 | 通过右键直接调用提示词优化器(https://github.com/linshenkx/prompt-optimizer)
@@ -44,7 +39,7 @@ python解释器 | 模拟python，直接执行命令
 2. 克隆或下载本项目。
 
    - 点击绿色的“Code”按钮，选择“Download ZIP”
-   - 使用git命令`git clone https://github.com/Hanzoe/petgpt.git`下载。
+   - 使用git命令`git clone https://github.com/Jerryfunny/Pet_and_prompt.git`下载。
 
 3. 将`config.ini`修改为`config_private.ini` ，并且修改参数"OPENAI_API_KEY"、"LLM_MODEL"。
    - 有代理的话，一定要修改自己的代理地址
@@ -96,9 +91,7 @@ python解释器 | 模拟python，直接执行命令
  
 - 右键支持跳转提示词优化器
     项目地址：https://github.com/linshenkx/prompt-optimizer
-    
-    ![image](https://user-images.githubusercontent.com/46673445/233023364-b1cbeeb3-d698-498b-afce-18891096cd22.png)
-
+   
 
 ## 自定义插件说明
 ### 常规按钮格式
@@ -127,12 +120,8 @@ To do
 - [ ] 跨设备平台？（重要）
 - [ ] 扮演角色类使用专门的命令调用，节省页面空间
 - [ ] 快捷键调用对话框
-- [ ] 代码显示
-- [ ] 公式显示
 - [ ] 实现宠物的互动
-- [ ] 热插件-论文阅读
 - [ ] 滑动条改变图像大小
-- [ ] live2D展示
 - [ ] 移动动态图
 - [ ] 增加其他项目接口（提示词优化器），转移开发重心
 
@@ -165,12 +154,7 @@ Done
 ## 参考
 1. https://github.com/f/awesome-chatgpt-prompts（获取prompts命令）
 2. https://github.com/tommyli3318/desktop-pet（想做桌面宠物版的）
-3. [https://github.com/binary-husky/chatgpt_academic](https://github.com/binary-husky/gpt_academic)（曾经在这上面做插件奉献，从而得到灵感）
-4. https://gitee.com/fg_slash/yuanshen-desktoppet#https://gitee.com/link?target=https%3A%2F%2Fpan.baidu.com%2Fs%2F1AuUjMnYgNScTla7yQA19Og（参考了gif图）
-
-## Star History
-
-[![Star History Chart](https://api.star-history.com/svg?repos=Hanzoe/Pet-GPT&type=Date)](https://www.star-history.com/#Hanzoe/Pet-GPT&Date)
+3. https://github.com/linshenkx/prompt-optimizer
 
 ## 免责申明
 此项目仅供个人学习，禁止商用或者其他非法用途
