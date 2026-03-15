@@ -493,11 +493,11 @@ def main():
 
         def open_webpage(self):
             import webbrowser
-            webbrowser.open("https://prompt.always200.com", new=0, autoraise=True)
+            webbrowser.open("http://localhost:18181", new=0, autoraise=True)
 
         def toggle_chat_web(self):
             import webbrowser
-            webbrowser.open("https://prompt.always200.com", new=0, autoraise=True)
+            webbrowser.open("http://localhost:18181", new=0, autoraise=True)
             
 
         #快捷键打开提示词优化器
